@@ -7,42 +7,39 @@ import numpy as np
 import scipy
 import matplotlib.pyplot as plt
 from multiprocessing import Process
-from tools import blink, led_on
+from tools import blink, led_on, play_audio
 
-ritmos1 = {'r3':4, 'r4':5 }
+# TODO this should have the heart fuctions
+ritmos1 = {'r3':4, 'r4':5 } 
 ritmos2 = {'r1':2, 'r2':3 }
+
+# This is a physical button
 palanca = True
 
-def play_audio(audio_file):
-	pygame.init()
-	song = pygame.mixer.Sound(audio_file)
-	clock = pygame.time.Clock()
-	song.play()
-	while True:
-	    clock.tick(60)
-	pygame.quit()
-
-def plot_ritmo(ritmo=2):
-	x = np.linspace(0.0, 5.0, 100)
-	y = np.cos(ritmo * np.pi * x) * np.exp(-x)
-	plt.plot(x, y)
 
 def buttonOn(audioBienvenida='audio/1.ogg'):
+	"""
+	callback for on/off button
+	"""
 	play_audio(audioBienvenida)
 
 def plugedIn(audioAnalisis='audio/2.ogg'):
+	"""
+	When the cable is plugedin check if the shock button
+	to look which set of rhythms we should use,
+	and if we should turn on the leds
+	"""
 	play_audio(audioAnalisis)
-	led_on(19)
+	led_on(19) # this should not be hardcoded
 	if palanca == True:
-		#shuffle of ritmos1
-		#lanzar hilo
+		# TODO shuffle of ritmos1
 		audio_file = 'audio/3.ogg'
 		ritmo = ritmos1['r3']
 		p_blink = Process(target=blink, args=(10, 10, 19,))
 		p_audio.start()
 
 	else:
-		#shuffle of ritmos2
+		# TODO shuffle of ritmos2
 		audio_file = 'audio/4.ogg'
 		ritmo = ritmos2['r2']
 
@@ -52,10 +49,19 @@ def plugedIn(audioAnalisis='audio/2.ogg'):
 	p_plot.start()
 	    	
 def electro_button():
+	"""
+	after resolving the shock phase you should wait 2'
+	and go back again to plugedIn fuction 
+	"""
 	time.sleep(120)
+	# TODO make a 60' alarm
 	print 'Pasaron 2 minutos!!!!'
 
 def gpio_setup():
+	"""
+	This is the output/input and callbacks setup for buttons and leds.
+	"""
+
 	GPIO.setmode(GPIO.BOARD)
 	GPIO.setup(19, GPIO.OUT)
 	GPIO.setup(23, GPIO.IN, pull_up_down = GPIO.PUD_DOWN) # boton ON/ OFF
