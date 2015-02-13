@@ -16,7 +16,6 @@ ritmos2 = {'r1':2, 'r2':3 }
 # This is a physical button
 palanca = True
 
-
 def buttonOn(audioBienvenida='audio/1.ogg'):
 	"""
 	callback for on/off button
