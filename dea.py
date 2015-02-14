@@ -65,7 +65,7 @@ class GPIO_DEA(object):
 		p_plot = Process(target=plot_ritmo, args=(ritmo,))
 		p_plot.start()
 	
-	def shock_button_pressed():
+	def shock_button_pressed(self):
 		"""
 		after resolving the shock phase you should wait 2'
 		and go back again to plugedIn fuction 
@@ -73,7 +73,7 @@ class GPIO_DEA(object):
 		time.sleep(120)
 		# TODO make a 60' alarm
 		print 'Pasaron 2 minutos!!!!'
-
+		self.pluged_in()
 
 	def blink(self, num_times, speed):
 		"""
