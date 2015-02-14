@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 from multiprocessing import Process
 from tools import blink, led_on, play_audio
 from rythms import rythms_test1
-
+import random
 
 class GPIO_DEA(object):
 	"""docstring for GPIO_DEA"""
@@ -53,15 +53,14 @@ class GPIO_DEA(object):
 		play_audio(audio_analisis)
 		self.led_on() # this should not be hardcoded
 		if self.get_switch_shock():
-			# TODO shuffle of ritmos1
 			audio_file = 'audio/3.ogg'
-			ritmo = ritmos1['r3']
+			rythm = rythms_shock[random.choice(rythms_shock.keys())]
 			p_blink = Process(target=self.blink, args=(10, 10, 19,))
 			p_audio.start()
 		else:
 			# TODO shuffle of ritmos2
 			audio_file = 'audio/4.ogg'
-			ritmo = ritmos2['r2'] # this should contain the name of the rytm fuc
+			rythm = rythms_no_shock[random.choice(rythms_no_shock.keys())]
 		p_audio = Process(target=play_audio, args=(audio_file,))
 		p_audio.start()
 		p_plot = Process(target=plot_ritmo, args=(ritmo,))
@@ -95,8 +94,8 @@ class GPIO_DEA(object):
 		GPIO.output(self.pin_led, True)
 
 # TODO this should have the heart fuctions
-ritmos1 = {'FV':, 'TV': }  # fibrilacion ventricular (FV) y la taquicardia ventricular
-ritmos2 = {'r1':rythms_test1, 'r2':}
+rythms_shock = {'FV':, 'TV': }  # fibrilacion ventricular (FV) y la taquicardia ventricular
+rythms_no_shock = {'r1':rythms_test1, 'r2':}
 
 def main():
 	# TODO var with num of pins
