@@ -51,14 +51,13 @@ class GPIO_DEA(object):
 		and if we should turn on the leds
 		"""
 		play_audio(audio_analisis)
-		self.led_on() # this should not be hardcoded
+		self.led_on()
 		if self.get_switch_shock():
 			audio_file = 'audio/3.ogg'
 			rythm = rythms_shock[random.choice(rythms_shock.keys())]
 			p_blink = Process(target=self.blink, args=(10, 10, 19,))
 			p_audio.start()
 		else:
-			# TODO shuffle of ritmos2
 			audio_file = 'audio/4.ogg'
 			rythm = rythms_no_shock[random.choice(rythms_no_shock.keys())]
 		p_audio = Process(target=play_audio, args=(audio_file,))
