@@ -12,27 +12,28 @@ from tools import blink, led_on, play_audio
 
 class GPIO_DEA(object):
 	"""docstring for GPIO_DEA"""
-	def __init__(self, pin_led, pin_onoff, pin_switch_shock, pin_cable):
+	def __init__(self, pin_led, pin_onoff, pin_switch_shock, pin_cable, pin_shock):
 		super(GPIO_DEA, self).__init__()
 		self.pin_led = pin_led
 		self.pin_onoff = pin_onoff
 		self.pin_switch_shock = pin_switch_shock
 		selg.pin_cable = pin_cable
+		self.pin_shock = pin_shock
 		self.setup()
 
 	def setup(self):
 		"""
 		This is the output/input and callbacks setup for buttons and leds.
 		"""
-		GPIO.setmode(GPIO.BOARD)
-		GPIO.setup(self.pin_led, GPIO.OUT)
-		GPIO.setup(23, GPIO.IN, pull_up_down = GPIO.PUD_DOWN) # boton ON/ OFF
-		GPIO.setup(24, GPIO.IN, pull_up_down = GPIO.PUD_UP) # cable
-		# agregar palanca
-		# agregar boton de descarga
-		GPIO.add_event_detect(, GPIO.RISING, callback=self.button_on, bouncetime=300)
-		GPIO.add_event_detect(24, GPIO.RISING, callback=self.pluged_in, bouncetime=300)
-
+		GPIO.setmode(GPIO.BCM)
+		GPIO.setup(self.pin_led, GPIO.OUT) # led, usos varios
+		GPIO.setup(self.pin_switch_shock, GPIO.IN) # palanca para saber si se aplica shock
+		GPIO.setup(self.pin_onoff, GPIO.IN, pull_up_down = GPIO.PUD_DOWN) # boton ON/ OFF
+		GPIO.setup(self.pin_shock, GPIO.IN, pull_up_down = GPIO.PUD_UP) # boton shock
+		# TODO implementar efecto de cable enchufado
+		GPIO.add_event_detect(self.pin_onoff, GPIO.RISING, callback=self.button_on, bouncetime=300)
+		GPIO.add_event_detect(self.shock, GPIO.RISING, callback=self.shock_button_pressed, bouncetime=300)
+		GPIO.add_event_detect(self.pin_cable, callback=self.pluged_in)
 
 	def get_switch_shock(self):
 		"""
@@ -101,6 +102,7 @@ ritmos1 = {'r3':4, 'r4':5 }
 ritmos2 = {'r1':2, 'r2':3 }
 
 def main():
+	# TODO var with num of pins
 	my_dea_gpio = GPIO_DEA()
 
 
