@@ -1,13 +1,10 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-import pygame
 import RPi.GPIO as GPIO
-import numpy as np
-import scipy
-import matplotlib.pyplot as plt
 from multiprocessing import Process
 from tools import blink, led_on, play_audio
+from rythms import rythms_test1
 
 
 class GPIO_DEA(object):
@@ -64,7 +61,7 @@ class GPIO_DEA(object):
 		else:
 			# TODO shuffle of ritmos2
 			audio_file = 'audio/4.ogg'
-			ritmo = ritmos2['r2']
+			ritmo = ritmos2['r2'] # this should contain the name of the rytm fuc
 		p_audio = Process(target=play_audio, args=(audio_file,))
 		p_audio.start()
 		p_plot = Process(target=plot_ritmo, args=(ritmo,))
@@ -98,12 +95,12 @@ class GPIO_DEA(object):
 		GPIO.output(self.pin_led, True)
 
 # TODO this should have the heart fuctions
-ritmos1 = {'r3':4, 'r4':5 } 
-ritmos2 = {'r1':2, 'r2':3 }
+ritmos1 = {'FV':, 'TV': }  # fibrilacion ventricular (FV) y la taquicardia ventricular
+ritmos2 = {'r1':rythms_test1, 'r2':}
 
 def main():
 	# TODO var with num of pins
-	my_dea_gpio = GPIO_DEA()
+	my_dea_gpio = GPIO_DEA(pin_led=19, pin_onoff=23, pin_switch_shock=24, pin_cable=, pin_shock=)
 
 
 if __name__ == '__main__':
