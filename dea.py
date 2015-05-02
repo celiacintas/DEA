@@ -38,13 +38,18 @@ class GPIO_DEA(object):
 		"""
 		return GPIO.input(self.pin_switch_shock)
 
-	def button_on(self, audio_bienvenida='audio/1.ogg'):
+	def button_on(self, audios_inicial=['audio/audio1.ogg','audio/audio2.ogg','audio/audio3.ogg'
+										'audio/audio4.ogg', 'audio/audio5.ogg', 'audio/audio6.ogg']):
 		"""
 		callback for on/off button
 		"""
-		play_audio(audio_bienvenida)
-
-	def pluged_in(self, audio_analisis='audio/2.ogg'):
+		map(play_audio(), audios_inicial)
+		
+	def pluged_in(self, audio_analisis='audio/audio7.ogg', audio_no_shock = ['audio/audio10.ogg'],
+														   audio_shock=['audio/audio9a.ogg',
+																		'audio/audio9b.ogg',
+																		'audio/audio9c.ogg',
+																		'audio/audio11.ogg']):
 		"""
 		When the cable is plugedin check if the shock button
 		to look which set of rhythms we should use,
@@ -53,26 +58,31 @@ class GPIO_DEA(object):
 		play_audio(audio_analisis)
 		self.led_on()
 		if self.get_switch_shock():
-			audio_file = 'audio/3.ogg'
+			audios_file = audio_shock
+			# TODO colocar delay, programar random para 2 o 3 shocks seguidos
 			rythm = rythms_shock[random.choice(rythms_shock.keys())]
 			p_blink = Process(target=self.blink, args=(10, 10, 19,))
 			p_audio.start()
 		else:
-			audio_file = 'audio/4.ogg'
+			audios_file = audio_no_shock
 			rythm = rythms_no_shock[random.choice(rythms_no_shock.keys())]
-		p_audio = Process(target=play_audio, args=(audio_file,))
+		p_audio = Process(target=play_audio, args=(audios_file,))
+		# TODO fix this to several files
 		p_audio.start()
 		p_plot = Process(target=plot_ritmo, args=(ritmo,))
 		p_plot.start()
 	
-	def shock_button_pressed(self):
+	def shock_button_pressed(self, after_shock_audio=['audio/audio12.ogg', 
+													  'audio/audio13.ogg',
+													  'audio/audio14.ogg' ]
+									emergency_audio=['audio/audio15.ogg']):
 		"""
 		after resolving the shock phase you should wait 2'
 		and go back again to plugedIn fuction 
 		"""
+		# TODO fix counter for diferent audios
+		play_audio(after_shock_audio)
 		time.sleep(120)
-		# TODO make a 60' alarm
-		print 'Pasaron 2 minutos!!!!'
 		self.pluged_in()
 
 	def blink(self, num_times, speed):

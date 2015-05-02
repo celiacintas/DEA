@@ -20,8 +20,8 @@ def play_audio(audio_file):
 
 def plot_ritmo(t, ecg):
 	"""
-	Dummy fuction, this should plot the cardio data of certain
-	ritmo
+	This fuction plot the cardio data of certain
+	rythm
 	"""
 	plt.plot(t, ecg)
 	plt.show()
